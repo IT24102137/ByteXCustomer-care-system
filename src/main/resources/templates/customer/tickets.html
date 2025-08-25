@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Tickets - ByteX Customer Care</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">ByteX Customer Care</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/customer/dashboard}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/customer/tickets}">My Tickets</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            Account
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>My Support Tickets</h2>
+            <a th:href="@{/customer/tickets/create}" class="btn btn-primary">Create New Ticket</a>
+        </div>
+        
+        <div class="alert alert-info" th:if="${tickets.empty}">
+            You don't have any support tickets yet. Create one to get help with your ByteX products.
+        </div>
+        
+        <div class="table-responsive" th:if="${!tickets.empty}">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Subject</th>
+                        <th>Status</th>
+                        <th>Priority</th>
+                        <th>Created</th>
+                        <th>Updated</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="ticket : ${tickets}">
+                        <td th:text="${ticket.ticketId}"></td>
+                        <td th:text="${ticket.subject}"></td>
+                        <td>
+                            <span class="badge" 
+                                  th:classappend="${
+                                    ticket.status == 'Open' ? 'bg-danger' : 
+                                    ticket.status == 'InProgress' ? 'bg-warning' : 
+                                    ticket.status == 'Pending' ? 'bg-info' : 
+                                    'bg-success'
+                                  }"
+                                  th:text="${ticket.status}">
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge" 
+                                  th:classappend="${
+                                    ticket.priority == 'Low' ? 'bg-secondary' : 
+                                    ticket.priority == 'Medium' ? 'bg-primary' : 
+                                    ticket.priority == 'High' ? 'bg-warning' : 
+                                    'bg-danger'
+                                  }"
+                                  th:text="${ticket.priority}">
+                            </span>
+                        </td>
+                        <td th:text="${#temporals.format(ticket.createdAt, 'dd-MM-yyyy HH:mm')}"></td>
+                        <td th:text="${#temporals.format(ticket.updatedAt, 'dd-MM-yyyy HH:mm')}"></td>
+                        <td>
+                            <a th:href="@{/customer/tickets/{id}(id=${ticket.ticketId})}" class="btn btn-sm btn-info">View</a>
+                            <a th:href="@{/customer/tickets/{id}/edit(id=${ticket.ticketId})}" class="btn btn-sm btn-warning">Edit</a>
+                            <button type="button" class="btn btn-sm btn-danger" 
+                                    data-bs-toggle="modal" 
+                                    th:data-bs-target="'#cancelModal' + ${ticket.ticketId}">
+                                Cancel
+                            </button>
+                            
+                            <!-- Cancel Modal -->
+                            <div class="modal fade" th:id="'cancelModal' + ${ticket.ticketId}" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Confirm Cancellation</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Are you sure you want to cancel ticket #<span th:text="${ticket.ticketId}"></span>?</p>
+                                            <p class="text-danger">This action cannot be undone.</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <form th:action="@{/customer/tickets/{id}/cancel(id=${ticket.ticketId})}" method="post">
+                                                <button type="submit" class="btn btn-danger">Cancel Ticket</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

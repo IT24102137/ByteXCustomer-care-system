@@ -1,0 +1,313 @@
+/* ByteX Customer Care - Main Stylesheet */
+/* Created for IT24102137 - 2025-08-25 */
+
+/* Custom Variables */
+:root {
+  --bytex-primary: #2563eb;      /* Primary brand color */
+  --bytex-secondary: #475569;    /* Secondary brand color */
+  --bytex-accent: #0ea5e9;       /* Accent color */
+  --bytex-light: #f9fafb;        /* Light background */
+  --bytex-dark: #1e293b;         /* Dark background */
+  --bytex-danger: #ef4444;       /* Danger/error color */
+  --bytex-success: #22c55e;      /* Success color */
+  --bytex-warning: #f59e0b;      /* Warning color */
+  --bytex-info: #3b82f6;         /* Info color */
+  --bytex-gray: #9ca3af;         /* Gray color */
+  --bytex-border-radius: 0.375rem;
+  --bytex-box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --transition-speed: 0.3s;
+}
+
+/* Base Styles */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
+  color: #333;
+  background-color: #f8fafc;
+  line-height: 1.6;
+}
+
+a {
+  color: var(--bytex-primary);
+  text-decoration: none;
+  transition: all var(--transition-speed) ease;
+}
+
+a:hover {
+  color: #1d4ed8;
+}
+
+/* Navbar Customization */
+.navbar-dark {
+  background-color: var(--bytex-dark) !important;
+}
+
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* Card Enhancements */
+.card {
+  box-shadow: var(--bytex-box-shadow);
+  border: none;
+  margin-bottom: 1.5rem;
+  border-radius: var(--bytex-border-radius);
+}
+
+.card-header {
+  background-color: #fff;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 1rem 1.25rem;
+}
+
+.card-header:first-child {
+  border-radius: calc(var(--bytex-border-radius) - 1px) calc(var(--bytex-border-radius) - 1px) 0 0;
+}
+
+/* Button Styles */
+.btn {
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: var(--bytex-border-radius);
+  transition: all var(--transition-speed) ease;
+}
+
+.btn-primary {
+  background-color: var(--bytex-primary);
+  border-color: var(--bytex-primary);
+}
+
+.btn-primary:hover {
+  background-color: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+.btn-secondary {
+  background-color: var(--bytex-secondary);
+  border-color: var(--bytex-secondary);
+}
+
+.btn-info {
+  background-color: var(--bytex-info);
+  border-color: var(--bytex-info);
+}
+
+.btn-success {
+  background-color: var(--bytex-success);
+  border-color: var(--bytex-success);
+}
+
+.btn-warning {
+  background-color: var(--bytex-warning);
+  border-color: var(--bytex-warning);
+}
+
+.btn-danger {
+  background-color: var(--bytex-danger);
+  border-color: var(--bytex-danger);
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+/* Form Controls */
+.form-control, .form-select {
+  border: 1px solid #e2e8f0;
+  border-radius: var(--bytex-border-radius);
+  padding: 0.625rem 0.75rem;
+  font-size: 0.95rem;
+  transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #93c5fd;
+  box-shadow: 0 0 0 0.25rem rgba(37, 99, 235, 0.25);
+}
+
+.form-label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #374151;
+}
+
+/* Badge Customization */
+.badge {
+  padding: 0.35em 0.65em;
+  font-size: 0.75em;
+  font-weight: 600;
+  border-radius: var(--bytex-border-radius);
+}
+
+/* Custom Status Colors */
+.status-open {
+  background-color: var(--bytex-danger);
+  color: white;
+}
+
+.status-inprogress {
+  background-color: var(--bytex-warning);
+  color: white;
+}
+
+.status-pending {
+  background-color: var(--bytex-info);
+  color: white;
+}
+
+.status-resolved {
+  background-color: var(--bytex-success);
+  color: white;
+}
+
+.status-closed {
+  background-color: var(--bytex-gray);
+  color: white;
+}
+
+/* Table Styling */
+.table {
+  margin-bottom: 0;
+  color: #333;
+}
+
+.table > :not(caption) > * > * {
+  padding: 0.75rem 1rem;
+}
+
+.table > thead {
+  background-color: #f8fafc;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(37, 99, 235, 0.05);
+}
+
+/* Ticket Details */
+.ticket-header {
+  background-color: #f8fafc;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: var(--bytex-border-radius);
+  box-shadow: var(--bytex-box-shadow);
+}
+
+.response-card {
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.response-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: #f8fafc;
+}
+
+/* Login Page */
+.login-container {
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: var(--bytex-border-radius);
+  box-shadow: var(--bytex-box-shadow);
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.login-header h2 {
+  color: var(--bytex-primary);
+  font-weight: 700;
+}
+
+/* Utility Classes */
+.bg-light-hover:hover {
+  background-color: #f8fafc;
+}
+
+.text-bytex-primary {
+  color: var(--bytex-primary);
+}
+
+.text-bytex-secondary {
+  color: var(--bytex-secondary);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 767.98px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+  
+  .table-responsive {
+    border-radius: var(--bytex-border-radius);
+    box-shadow: var(--bytex-box-shadow);
+  }
+}
+
+/* Dashboard Stats Cards */
+.stats-card {
+  background-color: #fff;
+  border-radius: var(--bytex-border-radius);
+  box-shadow: var(--bytex-box-shadow);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.stats-card-icon {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.75rem;
+  opacity: 0.2;
+  color: var(--bytex-primary);
+}
+
+.stats-card-title {
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--bytex-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.stats-card-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+
+.stats-card-subtitle {
+  font-size: 0.875rem;
+  color: var(--bytex-gray);
+}
