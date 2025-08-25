@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Ticket Details - ByteX Customer Care</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <style>
+        .response-card {
+            margin-bottom: 1rem;
+        }
+        .response-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .ticket-header {
+            background-color: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">ByteX Customer Care</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/customer/dashboard}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/customer/tickets}">My Tickets</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            Account
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" th:href="@{/logout}">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2>Ticket #<span th:text="${ticket.ticketId}"></span></h2>
+            <div>
+                <a th:href="@{/customer/tickets}" class="btn btn-secondary me-2">Back to Tickets</a>
+                <a th:href="@{/customer/tickets/{id}/edit(id=${ticket.ticketId})}" class="btn btn-warning" 
+                   th:if="${ticket.status != 'Closed' && ticket.status != 'Resolved'}">Edit Ticket</a>
+            </div>
+        </div>
+        
+        <!-- Ticket Details -->
+        <div class="ticket-header">
+            <div class="row">
+                <div class="col-md-8">
+                    <h3 th:text="${ticket.subject}"></h3>
+                    <div class="mb-2">
+                        <span class="badge" 
+                              th:classappend="${
+                                ticket.status == 'Open' ? 'bg-danger' : 
+                                ticket.status == 'InProgress' ? 'bg-warning' : 
+                                ticket.status == 'Pending' ? 'bg-info' : 
+                                'bg-success'
+                              }"
+                              th:text="${ticket.status}">
+                        </span>
+                        <span class="badge ms-1" 
+                              th:classappend="${
+                                ticket.priority == 'Low' ? 'bg-secondary' : 
+                                ticket.priority == 'Medium' ? 'bg-primary' : 
+                                ticket.priority == 'High' ? 'bg-warning' : 
+                                'bg-danger'
+                              }"
+                              th:text="${ticket.priority}">
+                        </span>
+                    </div>
+                    <p class="mb-0">Created: <span th:text="${#temporals.format(ticket.createdAt, 'dd-MM-yyyy HH:mm')}"></span></p>
+                    <p>Last Updated: <span th:text="${#temporals.format(ticket.updatedAt, 'dd-MM-yyyy HH:mm')}"></span></p>
+                </div>
+                <div class="col-md-4" th:if="${ticket.assignedToId != null}">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title">Assigned To</h6>
+                            <p class="card-text" th:if="${ticket.assignedTo != null}" th:text="${ticket.assignedTo.fullName}"></p>
+                            <p class="card-text" th:unless="${ticket.assignedTo != null}">Staff member</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-3 p-3 bg-white border rounded">
+                <p class="mb-0" th:text="${ticket.description}"></p>
+            </div>
+        </div>
+        
+        <!-- Responses -->
+        <h4 class="mb-3">Responses</h4>
+        
+        <div class="alert alert-info" th:if="${#lists.isEmpty(responses)}">
+            No responses yet. Our team will respond to your ticket soon.
+        </div>
+        
+        <div th:each="response : ${responses}" class="card response-card">
+            <div class="card-header response-header">
+                <div>
+                    <span th:text="${response.user != null ? response.user.fullName : 'Unknown User'}"></span>
+                    <span th:if="${response.user != null && response.user.role == 'Staff'}" class="badge bg-info ms-1">Staff</span>
+                    <span th:if="${response.user != null && response.user.role == 'Technician'}" class="badge bg-warning ms-1">Tech</span>
+                    <span th:if="${response.user != null && response.user.role == 'Customer'}" class="badge bg-secondary ms-1">You</span>
+                </div>
+                <small th:text="${#temporals.format(response.createdAt, 'dd-MM-yyyy HH:mm')}"></small>
+            </div>
+            <div class="card-body">
+                <p class="card-text" th:text="${response.message}"></p>
+            </div>
+        </div>
+        
+        <!-- Add Response Form -->
+        <div class="card mt-4" th:if="${ticket.status != 'Closed' && ticket.status != 'Resolved'}">
+            <div class="card-header">
+                <h5 class="mb-0">Add Response</h5>
+            </div>
+            <div class="card-body">
+                <form th:action="@{/customer/tickets/{id}/respond(id=${ticket.ticketId})}" th:object="${newResponse}" method="post">
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Your Message</label>
+                        <textarea class="form-control" id="message" th:field="*{message}" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit Response</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
